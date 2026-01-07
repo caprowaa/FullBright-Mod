@@ -11,12 +11,14 @@ public class Config {
     public static float smoothness = 0.10f;
     public static double range = 5.5;
     public static boolean aimEnabled = false;
+    public static boolean antiBot = true; // ВОТ ЭТА СТРОЧКА ВЕРНУЛАСЬ
     public static List<String> friends = new ArrayList<>();
     
     private static final Path CONFIG_PATH = MinecraftClient.getInstance().runDirectory.toPath().resolve("config/fullbright_friends.txt");
 
     public static void save() {
         try {
+            if (!Files.exists(CONFIG_PATH.getParent())) Files.createDirectories(CONFIG_PATH.getParent());
             Files.write(CONFIG_PATH, friends);
         } catch (IOException e) {
             e.printStackTrace();
