@@ -43,14 +43,14 @@ public class ModMenuIntegration implements ModMenuApi {
             // Вкладка 3: Binds
             ConfigCategory binds = builder.getOrCreateCategory(Text.literal("Binds"));
             
-            // Исправленные поля для биндов
+            // Используем правильный метод setSaveConsumer (он должен работать, если передать InputUtil.Key напрямую)
             binds.addEntry(entryBuilder.startKeyCodeField(Text.literal("Toggle Key"), InputUtil.fromKeyCode(Config.aimKey, 0))
-                    .setDefaultValue(InputUtil.fromKeyCode(326, 0)) // Default R
+                    .setDefaultValue(InputUtil.fromKeyCode(71, 0)) // Буква G для примера
                     .setSaveConsumer(key -> Config.aimKey = key.getCode())
                     .build());
             
             binds.addEntry(entryBuilder.startKeyCodeField(Text.literal("Add Friend Key"), InputUtil.fromKeyCode(Config.friendKey, 0))
-                    .setDefaultValue(InputUtil.fromKeyCode(327, 0)) // Default M
+                    .setDefaultValue(InputUtil.fromKeyCode(77, 0)) // Буква M
                     .setSaveConsumer(key -> Config.friendKey = key.getCode())
                     .build());
 
