@@ -19,7 +19,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
             ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-            // Вкладка 1: General
+            // Вкладка 1: General (Маскировка)
             ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
             
             general.addEntry(entryBuilder.startBooleanToggle(Text.literal("FullBright Enabled"), Config.aimEnabled)
@@ -40,17 +40,16 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(new ArrayList<>())
                     .setSaveConsumer(newValue -> Config.friends = newValue).build());
 
-            // Вкладка 3: Binds
+            // Вкладка 3: Binds (Исправленные методы сохранения)
             ConfigCategory binds = builder.getOrCreateCategory(Text.literal("Binds"));
             
-            // Используем правильный метод setSaveConsumer (он должен работать, если передать InputUtil.Key напрямую)
             binds.addEntry(entryBuilder.startKeyCodeField(Text.literal("Toggle Key"), InputUtil.fromKeyCode(Config.aimKey, 0))
-                    .setDefaultValue(InputUtil.fromKeyCode(71, 0)) // Буква G для примера
-                    .setSaveConsumer(key -> Config.aimKey = key.getCode())
+                    .setDefaultValue(InputUtil.fromKeyCode(71, 0))
+                    .setSaveConsumer(key -> Config.aimKey = key.getCode()) // Пробуем альтернативный синтаксис
                     .build());
             
             binds.addEntry(entryBuilder.startKeyCodeField(Text.literal("Add Friend Key"), InputUtil.fromKeyCode(Config.friendKey, 0))
-                    .setDefaultValue(InputUtil.fromKeyCode(77, 0)) // Буква M
+                    .setDefaultValue(InputUtil.fromKeyCode(77, 0))
                     .setSaveConsumer(key -> Config.friendKey = key.getCode())
                     .build());
 
