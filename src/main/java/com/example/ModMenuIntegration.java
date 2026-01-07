@@ -5,7 +5,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import java.util.ArrayList;
 
@@ -15,34 +14,25 @@ public class ModMenuIntegration implements ModMenuApi {
         return parent -> {
             ConfigBuilder builder = ConfigBuilder.create()
                     .setParentScreen(parent)
-                    .setTitle(Text.literal("FullBright Settings"));
+                    .setTitle(Text.literal("FullBright Settings"))
+                    .setSavingRunnable(Config::save);
 
             ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-
-            // Вкладка 1: General (Маскировка)
             ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
-            
+
             general.addEntry(entryBuilder.startBooleanToggle(Text.literal("FullBright Enabled"), Config.aimEnabled)
-                    .setDefaultValue(false)
-                    .setSaveConsumer(newValue -> Config.aimEnabled = newValue).build());
+                    .setSaveConsumer(v -> Config.aimEnabled = v).build());
 
             general.addEntry(entryBuilder.startFloatField(Text.literal("Smoothness"), Config.smoothness)
-                    .setDefaultValue(0.10f)
-                    .setSaveConsumer(newValue -> Config.smoothness = newValue).build());
+                    .setSaveConsumer(v -> Config.smoothness = v).build());
 
             general.addEntry(entryBuilder.startDoubleField(Text.literal("Illumination range"), Config.range)
-                    .setDefaultValue(5.5)
-                    .setSaveConsumer(newValue -> Config.range = newValue).build());
+                    .setSaveConsumer(v -> Config.range = v).build());
 
-            // Вкладка 2: Friends
             ConfigCategory friendsCat = builder.getOrCreateCategory(Text.literal("Friends"));
             friendsCat.addEntry(entryBuilder.startStrList(Text.literal("Friends List"), Config.friends)
                     .setDefaultValue(new ArrayList<>())
-                    .setSaveConsumer(newValue -> Config.friends = newValue).build());
-
-            // Вкладка 3: Binds (Исправленные методы сохранения)
-            ConfigCategory binds = builder.getOrCreateCategory(Text.literal("Binds"));
-            
+                    .setSaveConsumer(v -> Config.friends = v).build());
 
             return builder.build();
         };
