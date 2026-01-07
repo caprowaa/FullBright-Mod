@@ -5,15 +5,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import java.util.Comparator;
 
 public class AimLogic {
-    // === НАСТРОЙКИ МОДА ===
-    private static final double RANGE = 4.5;      // Радиус действия
-    private static final float SENSITIVITY = 0.2f; // Плавность (0.1 - медленно, 0.4 - быстро)
-    private static final String TARGET_PART = "mid"; // "head" (голова), "body" (тело), "mid" (грудь)
+    // Настройки для максимальной плавности
+    private static final double RANGE = 6.0;      
+    private static final float SMOOTHNESS = 0.12f; // Чем меньше, тем плавнее (0.05 - очень мягко)
 
-    public static void tick(MinecraftClient mc) {
-        // Работает только если режим включен и зажата кнопка атаки
-        if (!ExampleMod.aimEnabled || !mc.options.attackKey.isPressed()) return;
+    public static void renderTick() {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (!ExampleMod.aimEnabled || mc.player == null || mc.world == null) return;
 
+        // Ищем ближайшую цель
         PlayerEntity target = mc.world.getPlayers().stream()
             .filter(p -> p != mc.player && p.isAlive() && !p.isSpectator())
             .filter(p -> mc.player.distanceTo(p) < RANGE)
@@ -21,31 +21,30 @@ public class AimLogic {
             .orElse(null);
 
         if (target != null) {
-            double yOffset;
-            if (TARGET_PART.equals("head")) {
-                yOffset = target.getEyeHeight(target.getPose());
-            } else if (TARGET_PART.equals("body")) {
-                yOffset = target.getEyeHeight(target.getPose()) / 2;
-            } else {
-                yOffset = target.getEyeHeight(target.getPose()) * 0.85; // mid
-            }
+            // Рассчитываем позицию цели с учетом её движения (интерполяция)
+            double x = target.getX();
+            double y = target.getY() + (target.getEyeHeight(target.getPose()) * 0.85);
+            double z = target.getZ();
 
-            double dx = target.getX() - mc.player.getX();
-            double dy = (target.getY() + yOffset) - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
-            double dz = target.getZ() - mc.player.getZ();
-            double dist = Math.sqrt(dx * dx + dz * dz);
+            double dx = x - mc.player.getX();
+            double dy = y - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
+            double dz = z - mc.player.getZ();
+            double distXZ = Math.sqrt(dx * dx + dz * dz);
 
             float targetYaw = (float) (Math.atan2(dz, dx) * 180 / Math.PI) - 90;
-            float targetPitch = (float) -(Math.atan2(dy, dist) * 180 / Math.PI);
+            float targetPitch = (float) -(Math.atan2(dy, distXZ) * 180 / Math.PI);
 
-            // Прямое наведение через движок Fabric
-            mc.player.setYaw(lerpAngle(mc.player.getYaw(), targetYaw, SENSITIVITY));
-            mc.player.setPitch(lerpAngle(mc.player.getPitch(), targetPitch, SENSITIVITY));
+            // Плавное изменение углов (Lerp) без резких скачков
+            float newYaw = updateAngle(mc.player.getYaw(), targetYaw, SMOOTHNESS);
+            float newPitch = updateAngle(mc.player.getPitch(), targetPitch, SMOOTHNESS);
+
+            mc.player.setYaw(newYaw);
+            mc.player.setPitch(newPitch);
         }
     }
 
-    private static float lerpAngle(float start, float end, float factor) {
-        float delta = ((end - start + 180) % 360 + 360) % 360 - 180;
-        return start + delta * factor;
+    private static float updateAngle(float current, float target, float factor) {
+        float delta = ((target - current + 180) % 360 + 360) % 360 - 180;
+        return current + delta * factor;
     }
 }
