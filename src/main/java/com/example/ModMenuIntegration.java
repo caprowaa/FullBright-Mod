@@ -43,15 +43,6 @@ public class ModMenuIntegration implements ModMenuApi {
             // Вкладка 3: Binds (Исправленные методы сохранения)
             ConfigCategory binds = builder.getOrCreateCategory(Text.literal("Binds"));
             
-            binds.addEntry(entryBuilder.startKeyCodeField(Text.literal("Toggle Key"), InputUtil.fromKeyCode(Config.aimKey, 0))
-                    .setDefaultValue(InputUtil.fromKeyCode(71, 0))
-                    .setSaveConsumer(key -> Config.aimKey = key.getCode()) // Пробуем альтернативный синтаксис
-                    .build());
-            
-            binds.addEntry(entryBuilder.startKeyCodeField(Text.literal("Add Friend Key"), InputUtil.fromKeyCode(Config.friendKey, 0))
-                    .setDefaultValue(InputUtil.fromKeyCode(77, 0))
-                    .setSaveConsumer(key -> Config.friendKey = key.getCode())
-                    .build());
 
             return builder.build();
         };
