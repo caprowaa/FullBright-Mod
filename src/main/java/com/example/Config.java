@@ -2,18 +2,21 @@ package com.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.lwjgl.glfw.GLFW;
 
 public class Config {
-    // Стандартные настройки
-    public static float smoothness = 0.10f; // Плавность (0.01 - 1.0)
-    public static double range = 5.5;      // Дистанция
+    public static float smoothness = 0.10f;
+    public static double range = 5.5;
     public static boolean aimEnabled = false;
-    public static boolean antiBot = true;  // Проверка на ботов
+    public static boolean antiBot = true; // Теперь всегда true по умолчанию
     
-    // Список друзей (ники в нижнем регистре)
+    // Бинды
+    public static int aimKey = GLFW.GLFW_KEY_R;
+    public static int friendKey = GLFW.GLFW_KEY_M;
+    
     public static List<String> friends = new ArrayList<>();
 
     public static boolean isFriend(String name) {
-        return friends.contains(name.toLowerCase());
+        return name != null && friends.contains(name.toLowerCase());
     }
 }
