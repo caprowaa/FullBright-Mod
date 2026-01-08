@@ -1,32 +1,46 @@
 package net.minecraft.util.render.api;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 public class CoreProvider implements ClientModInitializer {
-    public static KeyBinding k_0x1;
+    private boolean rPressed = false;
+    private boolean mPressed = false;
 
     @Override
     public void onInitializeClient() {
+        // Загрузка сохраненного состояния (включен или выключен аим)
         InternalData.load();
-
-        ClientLifecycleEvents.CLIENT_STOPPING.register(c -> InternalData.save());
-
-        k_0x1 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.system.render.fb", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "Controls"));
+        
+        // Авто-сохранение при выходе из игры
+        net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents.CLIENT_STOPPING.register(c -> InternalData.save());
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (k_0x1.wasPressed()) {
-                class_102.a_0x1 = !class_102.a_0x1;
-            }
+            if (client.player == null || client.currentScreen != null) return;
+
+            long window = client.getWindow().getHandle();
+
+            
+            if (InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_R)) {
+                if (!rPressed) {
+                    class_102.a_0x1 = !class_102.a_0x1;
+                    rPressed = true;
+                }
+            } else { rPressed = false; }
+
+            
+            if (InputUtil.isMouseButtonPressed(window, 2)) {
+                if (!mPressed) {
+                    class_102.v_0x10();
+                    mPressed = true;
+                }
+            } else { mPressed = false; }
         });
 
+        
         WorldRenderEvents.LAST.register(context -> class_102.v_0x9());
     }
 }
