@@ -29,6 +29,11 @@ public class ModMenuIntegration implements ModMenuApi {
             general.addEntry(entryBuilder.startDoubleField(Text.literal("Illumination range"), Config.range)
                     .setSaveConsumer(v -> Config.range = v).build());
 
+            // НОВЫЙ ПОЛЗУНОК FOV
+            general.addEntry(entryBuilder.startFloatField(Text.literal("Aim FOV"), Config.fov)
+                    .setDefaultValue(90.0f)
+                    .setSaveConsumer(v -> Config.fov = v).build());
+
             ConfigCategory friendsCat = builder.getOrCreateCategory(Text.literal("Friends"));
             friendsCat.addEntry(entryBuilder.startStrList(Text.literal("Friends List"), Config.friends)
                     .setDefaultValue(new ArrayList<>())
