@@ -10,7 +10,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.minecraft.class_310.CoreProvider"
+      "net.minecraft.util.render.api.CoreProvider"
     ]
   },
   "depends": {
