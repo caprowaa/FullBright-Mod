@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "fabric-renderer-api-v1",
+  "id": "fabric-render-helper-v1",
   "version": "1.2.1",
   "name": "Fabric Renderer API",
   "description": "Internal library for optimized block rendering.",
