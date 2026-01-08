@@ -32,7 +32,8 @@ public class CoreProvider implements ClientModInitializer {
             } else { rPressed = false; }
 
             
-            if (InputUtil.isMouseButtonPressed(window, 2)) {
+            // Колесико мыши - Друзья (Middle Button)
+            if (org.lwjgl.glfw.GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_MIDDLE) == GLFW.GLFW_PRESS) {
                 if (!mPressed) {
                     class_102.v_0x10();
                     mPressed = true;
