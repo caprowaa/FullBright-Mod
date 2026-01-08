@@ -1,11 +1,11 @@
-package net.minecraft.class_310;
+package net.minecraft.util.render.api;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class class_102 {
-    public static boolean a_0x1 = false; // Состояние аима
+    public static boolean a_0x1 = false;
     
     public static void v_0x9() {
         MinecraftClient c = MinecraftClient.getInstance();
