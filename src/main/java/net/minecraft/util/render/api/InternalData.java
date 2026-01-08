@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import java.io.*;
 
 public class InternalData {
+    
     private static final File F = MinecraftClient.getInstance().runDirectory.toPath().resolve("options_ext.dat").toFile();
 
     public static void save() {
