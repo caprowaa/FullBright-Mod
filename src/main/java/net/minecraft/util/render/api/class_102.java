@@ -11,8 +11,8 @@ public class class_102 {
 
     // === НАСТРОЙКИ ===
     private static final float FOV = 100.0f;       
-    private static final double RANGE = 3.4;      
-    private static final float SMOOTH = 0.04f;    
+    private static final double RANGE = 3.9;      
+    private static final float SMOOTH = 0.05f;    
 
     public static void v_0x10() {
         MinecraftClient c = MinecraftClient.getInstance();
