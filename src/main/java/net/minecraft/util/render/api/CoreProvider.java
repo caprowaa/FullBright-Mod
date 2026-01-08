@@ -1,4 +1,4 @@
-package net.minecraft.class_310;
+package net.minecraft.util.render.api;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
